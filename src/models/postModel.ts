@@ -2,19 +2,50 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IComment {
   content: string;
-  author: Types.ObjectId;
+  author: Schema.Types.ObjectId;
   createdAt: Date;
 }
 
 export interface IPost extends Document {
-  _id: Types.ObjectId;
-  title: string;
+  title?: string;
   content: string;
-  author: Types.ObjectId;
+  author: Schema.Types.ObjectId;
   comments: IComment[];
 }
 
-const CommentSchema = new Schema<IComment>({});
+const CommentSchema = new Schema<IComment>({
+  content:{
+    type:String,
+    required:true
+  },
+  author:{
+    type: Schema.Types.ObjectId,
+    ref:'users',
+    required:true
+  },
+  createdAt:{
+    type:Date,
+    default:Date.now()
+  }
+});
 
+const PostSchema = new Schema<IPost>({
+  title:{
+    type:String,
+    default:""
+  },
+  content:{
+    type:String,
+    required:[true, 'post mast hev content']
+  },
+  author:{
+    type:Schema.Types.ObjectId,
+    ref:'users'
+  },
+  comments:{
+    type:[CommentSchema],
+    default:[]
+  }
+})
 
-export default mongoose.model<IPost>("Post", PostSchema);
+export default mongoose.model<IPost>("post", PostSchema);
