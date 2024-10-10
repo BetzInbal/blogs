@@ -20,7 +20,7 @@ const CommentSchema = new Schema<IComment>({
   },
   author:{
     type: Schema.Types.ObjectId,
-    ref:'users',
+    ref:'user',
     required:true
   },
   createdAt:{
@@ -40,7 +40,7 @@ const PostSchema = new Schema<IPost>({
   },
   author:{
     type:Schema.Types.ObjectId,
-    ref:'users'
+    ref:'user'
   },
   comments:{
     type:[CommentSchema],

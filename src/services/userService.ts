@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import IgenarelResponsDTO from "../types/DTO/generalResponsDTO";
 import UserModel, { IUser } from "../types/models/userModel";
 import bcrypt from 'bcrypt'
@@ -31,7 +32,7 @@ import bcrypt from 'bcrypt'
  const getUser = async (userId:string): Promise<IUser| IgenarelResponsDTO> => {
     try {
         
-        const user:IUser | null = await UserModel.findOne({userId})
+        const user:IUser | null = await UserModel.findOne({_id:userId})
         if (user)
         {return user}
         return {
@@ -46,7 +47,7 @@ import bcrypt from 'bcrypt'
 const getUserByName = async (userName:string): Promise<IUser| IgenarelResponsDTO> => {
     try {
         
-        const user:IUser | null = await UserModel.findOne({"username":userName})
+        const user:IUser | null = await UserModel.findOne({username:userName})
         if (user)
         {return user}
         return {
@@ -58,11 +59,24 @@ const getUserByName = async (userName:string): Promise<IUser| IgenarelResponsDTO
         }
 }
 
+const addPostId = async (userId: ObjectId, postid:ObjectId): Promise<void> => {
+    try {
+console.log(userId+ " $$$$$" + postid);
+
+        await UserModel.findByIdAndUpdate(
+             userId ,
+            { $push: { posts: postid } }
+            );
+    } catch (error) {
+        throw new Error ((error as Error).message)       
+    }
+}
 export default {
     createUser,
     getUsers,
     getUserByName,
-    getUser
+    getUser,
+    addPostId
 }
 
 
