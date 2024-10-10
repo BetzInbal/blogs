@@ -35,7 +35,8 @@ const UserSchema = new Schema<IUser>({
       required:[true,'bio is required']
     },
     socialLinks:{
-      type:String
+      type:[String],
+      default:[]
     }
   }
   ,
